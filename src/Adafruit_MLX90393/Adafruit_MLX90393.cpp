@@ -322,6 +322,10 @@ bool Adafruit_MLX90393::readMeasurement(float *x, float *y, float *z) {
   if (transceive(tx, sizeof(tx), rx, sizeof(rx), 0) != MLX90393_STATUS_OK) {
     return false;
   }
+  //Serial.println(rx[0]);
+  //Serial.println(rx[1]);
+  //Serial.println(rx[2]);
+  //Serial.println(rx[3]);
 
   int16_t xi, yi, zi;
 
@@ -462,6 +466,10 @@ uint8_t Adafruit_MLX90393::transceive(uint8_t *txbuf, uint8_t txlen,
     }
     delay(interdelay);
   }
+
+  //Serial.print("tx command: tx status: ");
+  //Serial.print(txbuf[0]);Serial.print(", ");
+  //Serial.println(status);
 
   /* Mask out bytes available in the status response. */
   return (status >> 2);

@@ -199,12 +199,14 @@ public:
   bool getEvent(sensors_event_t *event);
   void getSensor(sensor_t *sensor);
 
-private:
   Adafruit_I2CDevice *i2c_dev = NULL;
-  Adafruit_SPIDevice *spi_dev = NULL;
 
   bool readRegister(uint8_t reg, uint16_t *data);
   bool writeRegister(uint8_t reg, uint16_t data);
+
+private:
+  Adafruit_SPIDevice *spi_dev = NULL;
+
   bool _init(void);
   uint8_t transceive(uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf = NULL,
                      uint8_t rxlen = 0, uint8_t interdelay = 10);
