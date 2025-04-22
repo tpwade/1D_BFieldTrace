@@ -1,16 +1,21 @@
-# Automated Magnetic Field and Position Logger using :
+# (Semi) Automated Magnetic Field and Position Logger using :
 
- * Track position using optical counter
- * measure field using MLX90393 field sensor
+ * track position using optical counter (Encoder.h)
+ * measure field using MLX90393 field sensor (MLX90393)
+ * measure AC field using pickup loop (not implemented yet)
+ * use tracked position to trigger reading
+
+The stock, Arduino IDE provided libraries for the Encoder and MLX90393 magnetic field sensor both have some limitations, so I have modifed them both to better support this application. The Arduino IDE expects them both
 
 ## General Notes
+
 There are a few approaches to figuring out when to read back the data after a
-reading is triggered. There is a data ready pin (INT/DRDY), but it isn't
-accessible over the default 4-pin i2c connection. There is status byte (i.e.
-similar to the technique I used with the MAG3110) that contains an error bit
-that is off when DRDY is low, but the Adafruit library doesn't fully take
-advantage of it. The library simply uses a delay based on the conversion time
-to wait before reading back, and I'm sticking to that logic for now.
+reading is triggered. On the MLX90393 chip There is a data ready pin (INT/DRDY),
+but it isn't accessible over the default 4-pin i2c connection. There is status
+byte (i.e. similar to the technique I used with the MAG3110) that contains an
+error bit that is off when DRDY is low, but the Adafruit library doesn't fully
+take advantage of it. The library simply uses a delay based on the conversion
+time to wait before reading back, and I'm sticking to that logic for now.
 
 For manual triggering I had set OSR_3 (=0x03) and FILTER_7 (=0x07). This
 results in a conversion time of 200.37 + 10 ms, and from Fig 2/3, noise around
@@ -140,6 +145,7 @@ I.e.
         : 0.01670335 in/count
         : 0.4242650 mm / count
 
+Thus it might be reasonable to take a measurement every 16 counts (1/4 turn) or ~6.8 mm
 Thus it might be reasonable to take a measurement every 16 counts (1/4 turn) or ~6.8 mm
 
 

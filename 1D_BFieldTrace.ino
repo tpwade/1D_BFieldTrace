@@ -1,34 +1,51 @@
 
+
+
 #define useEncoder
 #define useMLX90393
-#define usePickup
+//#define usePickup
 
 #include "limits.h"
 
 
 bool triggerReading = false;
-unsigned long triggerTime = ULONG_MAX;
-unsigned long readDelay = 200 + 10;
-int16_t dataPt = 0;
-long triggerInt = 0;
-//float triggerPos = 0;
-float mmPerTrigger = 0.4242650;
+unsigned long triggerTime = ULONG_MAX; // pgm time at which reading is triggered
+// unsigned long readDelay = 200 + 10;
+int16_t dataPt = 0; // incremented on each reading
 
+//****************************************************************************//
 
 
 #ifdef useEncoder
 
+long triggerInt = 0; // integer counter of trigger (goes up and down)
+float mmPerTrigger = 0.4242650; // each edge counts as a trigger in Encoder
+
 const int encoderDebugLevel = 0; // how verbose the output is
 
-#include <Encoder.h>
+#include <Encoder_TPW.h>
+// Note 1: The version 1.4.4 Paul Stoffregen Encoder library provided by the IDE
+// does not include support for Uno R4 boards. Download the github version
+// instead (commit c7627dd, reported version 1.4.4), renamed appropriately so 
+// the IDE version doesn't conflict.
+// Note 2: One Uno R4 boards it doesn't seem to work if the second, dtPin, is one 
+// of the physical interrupt pins, even though both being interrupt pins is 
+// supposedly optimal.
 
 // Change these two numbers to the pins connected to your encoder.
 //   Best Performance: both pins have interrupt capability
 //   Good Performance: only the first pin has interrupt capability
 //   Low Performance:  neither pin has interrupt capability
 //   avoid using pins with LEDs attached
+#ifdef ARDUINO_UNOR4_MINIMA
+// for some strange reason pins 2/3 don't seem to work for UNO R4
+// but 3/4 do.
+const int clkPin = 3;
+const int dtPin = 4;
+#else
 const int clkPin = 2;
 const int dtPin = 3;
+#endif
 
 Encoder myEnc(clkPin,dtPin);
 long oldPosition  = -999;
@@ -37,13 +54,13 @@ long encoderStep = 4; // take a measurement every n steps
 
 #endif
 
-
+//****************************************************************************//
 
 #ifdef useMLX90393
 
 const int bFieldDebugLevel = 0; // how verbose the output is
 
-#include "Adafruit_MLX90393_TPW.h"
+#include "src/Adafruit_MLX90393/Adafruit_MLX90393.h"
 // Same as the stock library, but readRegister
 // has been moved from private to public
 
@@ -65,12 +82,16 @@ mlx90393_resolution_t adcRes = MLX90393_RES_16; // _16 = 0x00 = lowest 16 bits f
 // and noise will be ~5to8 mGauss (0.5 to 0.8 uT)
 mlx90393_oversampling_t osr = MLX90393_OSR_0; // _3 = 0x03 = highest OSR
 mlx90393_filter_t digFilt = MLX90393_FILTER_6; // _7 = 0x07 = most filtering
-//readDelay = mlx90393_tconv[digFilt][osr] + 10;
+unsigned long readDelay = mlx90393_tconv[digFilt][osr] + 5;
 //
 
 #endif
 
+//****************************************************************************//
 
+#ifdef usePickup
+
+#endif
 
 void setup() {
     // put your setup code here, to run once:
@@ -90,7 +111,7 @@ void setup() {
 
 #ifdef useMLX90393
     uint16_t registerData;
-    readDelay = mlx90393_tconv[digFilt][osr] + 5;
+    //readDelay = mlx90393_tconv[digFilt][osr] + 5;
 
     if (! bFieldSensor.begin_I2C()) {   // hardware I2C mode, can pass in address & alt Wire
         Serial.println("No sensor found ... check your wiring?");
@@ -266,6 +287,9 @@ void loop() {
 #ifdef useEncoder
 
     long newPosition = myEnc.read();
+    //Serial.print(clkPin);
+    //Serial.print("newPosition ");
+    //Serial.println(newPosition);
     if (newPosition != oldPosition) {
 
         oldPosition = newPosition;
