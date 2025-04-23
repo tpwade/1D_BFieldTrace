@@ -94,8 +94,9 @@ The settings as shipped are:
  * The above osr/digFilt lead to:
    * (conversion time of 13.36 ms +5 ms extra buffer).
    This should ensure that the reading for one location is completed before the
-next reading is triggered. Warnings will be reported if a new position trigger
-is issued before the magnetic field for the previous location is completed.
+   next reading is triggered. Warnings will be reported if a new position
+   trigger is issued before the magnetic field for the previous location is
+   completed.
    * noise level is roughly 0.9 uT (XY) to 1.2 uT (Z)
  * analogGain = MLX90393_GAIN_1X = 0x07 = highest analog gain
    * note the defines (enum) here might go opposite of what you expect
@@ -103,6 +104,9 @@ is issued before the magnetic field for the previous location is completed.
  * The above analogGain/adcRes lead to
    * sensitivity of 0.150 uT/LSB (XY) 0.242 uT/LSB (Z)
    * range of +/- 4.9 mT (XY), +/- 7.9 mT (Z) (int16)
+   * The H12 gradient has and efficiency of approx 0.220 mT/m/A so on a 20A DC
+   supply, and r=0.12m, so anticipate peak fields of around 500 uT.
+
 
 ## Recommended data acquisition approach:
 
