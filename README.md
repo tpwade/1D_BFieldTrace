@@ -205,7 +205,9 @@ either overwrite the modified library as it gets updated or report conflicts.
 For this reason, and to keep the code self contained, I have decided to keep the
 necessary modified libraries local to the project directory. Libraries included
 this was need to be kept in the Sketch/src/ folder.
+
 [ref1](https://forum.arduino.cc/t/how-do-i-include-a-library-in-a-sketch-directory/1079812)
+
 [ref2](https://arduino.github.io/arduino-cli/1.2/sketch-specification/#src-subfolder)
 
 ## General Notes
@@ -238,8 +240,11 @@ readings, as well as ensuring the positioning is good to within
 [2](https://github.com/PaulStoffregen/Encoder?tab=readme-ov-file)
 
 what the signal looks like:
+
+```
 ____|****|____|****|____|****|____ (1) CLK
 __|****|____|****|____|****|______ (2) DTs
+```
 
 I tried writing some of my own code, but the PaulStoffregen Encoder Library just works (mostly). It's pretty obfuscated, but I gather that was necessary due to the limitaions of the Arduino interrupts.
 
@@ -247,12 +252,14 @@ I tried writing some of my own code, but the PaulStoffregen Encoder Library just
 
 Oiyagai 5pcs LM393 Chip Motor Measuring Comparator Speed Sensor Module Slot Type IR Optocoupler for MCU Arduino
 
+```
 Arduino Connection
 LM393.1 : LM393.2 : Dupont : Ethernet : Dupont : Arduino
 5V      : 5V      : Red    : Br       : Red    : 5V
 Gnd     : Gnd     : Bk     : Bl/ & O/ : Bk     : Gnd
 D0      : N/C     : Yellow : O        : Yellow : D2
 N/C     : D0      : White  : Bl       : White  : D3
+```
 
 ### Note 1:
 I'm not 100% sure which is #1 or #2 (Clk / DT) for the sensors. Regardless, the opto-sensor connection can just be swapped to ensure the counting goes in the desired direction.
