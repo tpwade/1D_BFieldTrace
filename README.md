@@ -283,14 +283,18 @@ correct defines. Also be aware that if using and Uno R4 minima (or similar)
 ## Magnetometer Wiring
 
 Arduino Connection:
-https://docs.arduino.cc/hardware/nano/
-https://www.cable-tester.com/i2c-pin-out/
 
+[https://docs.arduino.cc/hardware/nano/](https://docs.arduino.cc/hardware/nano/)
+
+[https://www.cable-tester.com/i2c-pin-out/](https://docs.arduino.cc/hardware/nano/)
+
+```
 MLX90393 (QWIIC connector, in order):
 Black  : Gnd
 Red    : 3.3V / 5V
 Blue   : SDA : A4
 Yellow : SCL : A5
+```
 
 ### Note 1: for StemmaQT / QWIIC, the spec is for 3.3V logic, the MLX90393 I
 have claims to have logic level shifters, but it's not immediately clear if
