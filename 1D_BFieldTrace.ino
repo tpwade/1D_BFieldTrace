@@ -23,11 +23,11 @@ float mmPerTrigger = 0.4242650; // each edge counts as a trigger in Encoder
 
 const int encoderDebugLevel = 0; // how verbose the output is
 
-#include <Encoder_TPW.h>
+#include "src/Encoder-master/Encoder.h"
 // Note 1: The version 1.4.4 Paul Stoffregen Encoder library provided by the IDE
 // does not include support for Uno R4 boards. Download the github version
-// instead (commit c7627dd, reported version 1.4.4), renamed appropriately so 
-// the IDE version doesn't conflict.
+// instead (commit c7627dd, reported version 1.4.4), and keep it local to the
+// project directory so it doesn't conflict with IDE provided library
 // Note 2: One Uno R4 boards it doesn't seem to work if the second, dtPin, is one 
 // of the physical interrupt pins, even though both being interrupt pins is 
 // supposedly optimal.
@@ -77,12 +77,12 @@ mlx90393_resolution_t adcRes = MLX90393_RES_16; // _16 = 0x00 = lowest 16 bits f
 
 // OSR_3 = 0x03 = highest OSR
 // FILTER_7 = 0x07 = most filtering
-// select OSR = 1, filter = 7
+// select OSR = 0, filter = 6
 // this drops the T_conv down to 50+10 ms
 // and noise will be ~5to8 mGauss (0.5 to 0.8 uT)
-mlx90393_oversampling_t osr = MLX90393_OSR_0; // _3 = 0x03 = highest OSR
-mlx90393_filter_t digFilt = MLX90393_FILTER_6; // _7 = 0x07 = most filtering
-unsigned long readDelay = mlx90393_tconv[digFilt][osr] + 5;
+mlx90393_oversampling_t osr = MLX90393_OSR_0; // _0 = 0x00 = lowest OSR
+mlx90393_filter_t digFilt = MLX90393_FILTER_6; // _6 = 0x06 = second most filtering
+unsigned long readDelay = mlx90393_tconv[digFilt][osr] + 5; // [6][0] : tconv = 13.36+5
 //
 
 #endif
