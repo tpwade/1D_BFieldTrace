@@ -60,6 +60,9 @@ long encoderStep = 4; // take a measurement every n steps
 
 const int bFieldDebugLevel = 0; // how verbose the output is
 
+// address might be 0x0C or 0x18 depending on config of sensor
+#define MLX90393_ADDR 0x18
+
 #include "src/Adafruit_MLX90393/Adafruit_MLX90393.h"
 // Same as the stock library, but readRegister
 // has been moved from private to public
@@ -113,7 +116,7 @@ void setup() {
     uint16_t registerData;
     //readDelay = mlx90393_tconv[digFilt][osr] + 5;
 
-    if (! bFieldSensor.begin_I2C()) {   // hardware I2C mode, can pass in address & alt Wire
+    if (! bFieldSensor.begin_I2C(MLX90393_ADDR)) {   // hardware I2C mode, can pass in address & alt Wire
         Serial.println("No sensor found ... check your wiring?");
         while (1) { delay(10); }
     }
